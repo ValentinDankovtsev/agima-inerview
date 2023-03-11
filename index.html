@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Тестовое задание</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(180deg, rgba(224, 224, 224, 0.8) 0%, rgba(141, 241, 255, 0.64) 87.5%), #DF9BFF;
+            font-family: Inter;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cats__main {
+            font-size: 24px;
+            width: 100%;
+            height: 400px;
+        }
+
+        .cats__wrapper {
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        .cats__bottoms {
+            font-size: 12px;
+            padding-top: 109px;
+            display: flex;
+            justify-content: space-between;
+            height: 180px;
+            gap: 21px;
+        }
+
+        .cats__bottom-item {
+            width: 100%;
+            height: 100%;
+        }
+
+        .cats__bottom-description {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cats__bottom-header {
+            font-size: 1em;
+            line-height: 2em;
+        }
+
+        .cats__bottom-text {
+            font-size: 0.7em;
+            line-height: 2.2em;
+            background: none;
+            border: none;
+        }
+
+        .cats__bottom-text::placeholder {
+            color: #000000;
+        }
+
+        .cats__bottom-size {
+            font-size: 0.8em;
+            line-height: 2em;
+        }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const input = $('.cats__bottom-text');
+            function loadImage(url, dataImg) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    xhrFields: { responseType: 'blob' },
+                    dataType: 'binary',
+                    success: function (blob) {
+                        var url = URL.createObjectURL(blob);
+                        let image = `img[data-img = ${dataImg}]`;
+                        let size = `span[data-size = ${dataImg}]`;
+                        $(image).attr("src", url);
+                        const img = $(image).get(0);
+                        img.onload = function () {
+                            var w = img.naturalWidth;
+                            var h = img.naturalHeight;
+                            console.log(h, 'h')
+                            const str = w + 'X' + h;
+                            $(size).text(str);
+                        }
+                    },
+                    error: function (xhr, status) {
+                        console.log('При загрузке файла произошла ошибка:', xhr);
+                    }
+                });
+            }
+
+            input.change(function () {
+                const url = 'https://cataas.com/cat/says/' + $(this).val();
+                const dataImg = $(this).data('img');
+                loadImage(url, dataImg);
+            });
+
+            input.on('input', function () {
+                const url = 'https://cataas.com/cat/says/' + $(this).val();
+                const dataImg = $(this).data('img');
+                loadImage(url, dataImg);
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <section class="cats__wrapper">
+        <div class="cats__main">
+            <div class="cats__bottom-item">
+                <p class="cats__bottom-header">Main Cat</p>
+                <img src="hello 1.png" data-img="main" alt="kitty">
+                <div class="cats__bottom-description">
+                    <input class="cats__bottom-text js-name" data-img="main" placeholder="hello" />
+                    <span class="cats__bottom-size" data-size="main">300x200</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="cats__bottoms">
+            <div class="cats__bottom-item">
+                <p class="cats__bottom-header">Small cat</p>
+                <img src="meow 1.png" data-img="bottom-1" alt="hello 1">
+                <div class="cats__bottom-description">
+                    <input class="cats__bottom-text  js-name" data-img="bottom-1" placeholder="prupru" />
+                    <span class="cats__bottom-size" data-size="bottom-1">200x100</span>
+                </div>
+            </div>
+            <div class="cats__bottom-item">
+                <p class="cats__bottom-header">Another small cat</p>
+                <img src="prupru 1.png" data-img="bottom-2" alt="prupru 1">
+                <div class="cats__bottom-description">
+                    <input class="cats__bottom-text js-name" data-img="bottom-2" placeholder="meow" />
+                    <span class="cats__bottom-size" data-size="bottom-2">200x100</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
